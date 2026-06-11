@@ -1682,6 +1682,7 @@ kbd{
   .nav-xp-pill .nav-clock-txt{display:none;}
   .nav-hamburger{display:flex;}
   .nav-edit-btn{display:none;}
+  .nav-subjects-btn{display:none;}
 }
 @media(max-width:400px){
   .nav-xp-pill{display:none;}
@@ -1966,6 +1967,13 @@ kbd{
   padding:6px 13px;border-radius:20px;
   background:none;border:1px solid var(--border);color:var(--muted);
   cursor:pointer;transition:all .2s;
+  
+  @media (min-width: 721px) {
+  .nav-subjects-btn {
+    display: none;
+  }
+}
+  
 }
 .nav-subjects-btn:hover{border-color:var(--teal);color:var(--teal);background:rgba(79,240,196,.06);}
 @media(max-width:600px){
@@ -6107,10 +6115,13 @@ setInterval(() => {
     }
 
     renderList();
-    closeForm();
+    
     if (window.renderSubjectsGrid) window.renderSubjectsGrid();
     if (window.updateHomeDashboard) window.updateHomeDashboard();
     if (window.refreshNavSubjects) window.refreshNavSubjects();
+
+    closeForm();
+   
   }
 
   // ── DELETE ──
