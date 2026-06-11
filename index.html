@@ -1600,6 +1600,14 @@ kbd{
   cursor:pointer;transition:all .2s;
 }
 .nav-edit-btn:hover{border-color:var(--violet);color:var(--violet);background:rgba(179,136,255,0.06);}
+.nav-tour-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 13px;border-radius:20px;
+  background:none;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;transition:all .2s;
+}
+.nav-tour-btn:hover{border-color:var(--sky);color:var(--sky);background:rgba(91,200,245,0.06);}
 
 /* hamburger for mobile */
 .nav-hamburger{
@@ -1670,6 +1678,123 @@ kbd{
 @media(max-width:400px){
   .nav-xp-pill{display:none;}
 }
+
+/* ── TOUR CARD ── */
+#tourCard {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 300px;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.45);
+  z-index: 9000;
+  overflow: hidden;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  animation: tourSlideIn .3s cubic-bezier(.34,1.4,.64,1);
+}
+@keyframes tourSlideIn {
+  from { opacity:0; transform: translateY(16px) scale(.97); }
+  to   { opacity:1; transform: translateY(0) scale(1); }
+}
+#tourProgress {
+  height: 3px;
+  background: var(--surface3);
+}
+#tourProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--sky), var(--violet));
+  border-radius: 0 3px 3px 0;
+  transition: width .4s ease;
+}
+#tourBody {
+  padding: 16px 18px 12px;
+}
+#tourIcon { font-size: 26px; margin-bottom: 8px; line-height: 1; }
+#tourTitle {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+#tourDesc {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+#tourFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 14px;
+  gap: 8px;
+}
+#tourSkip {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+#tourSkip:hover { border-color: var(--rose); color: var(--rose); }
+#tourNav {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+#tourPrev, #tourNext {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: none;
+  cursor: pointer;
+  transition: all .2s;
+}
+#tourPrev {
+  background: var(--surface2);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+#tourPrev:hover { color: var(--text); }
+#tourPrev:disabled { opacity: .3; cursor: default; }
+#tourNext {
+  background: linear-gradient(135deg, var(--sky), var(--violet));
+  color: #07070f;
+}
+#tourNext:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(91,200,245,.3); }
+#tourCounter {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+/* highlight pulse on target elements */
+.tour-highlight {
+  outline: 2px solid var(--sky) !important;
+  outline-offset: 3px !important;
+  border-radius: 8px;
+  animation: tourPulse 1.5s ease infinite;
+}
+@keyframes tourPulse {
+  0%,100% { outline-color: var(--sky); box-shadow: 0 0 0 0 rgba(91,200,245,0); }
+  50%      { outline-color: var(--sky); box-shadow: 0 0 0 5px rgba(91,200,245,.2); }
+}
+@media(max-width:500px){
+  #tourCard { right:12px; bottom:70px; width:calc(100vw - 24px); }
+}
+  .highlight-element { box-shadow: 0 0 0 2px var(--sky) !important; animation: none; }
+}
 </style>
 </head>
 <body>
@@ -1707,6 +1832,7 @@ kbd{
       <span id="nav-xp-label">0 XP</span>
     </div>
     <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math')">✏ Edit Cards</button>
+    <button class="nav-tour-btn" id="replay-tour-btn" onclick="replayOnboarding()" title="Replay Tour">🗺 Tour</button>
     <div class="nav-clock" id="nav-clock">—</div>
     <button class="nav-hamburger" id="nav-hamburger" onclick="toggleNavDrawer()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -1737,6 +1863,7 @@ kbd{
   <div class="nav-drawer-row">
     <span class="nav-drawer-label" id="drawer-xp">Level 1 · 0 XP</span>
     <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math');closeNavDrawer()">✏ Edit Cards</button>
+    <button class="nav-edit-btn" onclick="replayOnboarding();closeNavDrawer()">🗺 Tour</button>
   </div>
 </div>
 
@@ -2432,6 +2559,24 @@ kbd{
         <button class="editor-cancel-btn" onclick="closeEditorForm()">Cancel</button>
         <button class="editor-save-btn" onclick="saveEditorCard()">Save Card</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOUR CARD (bottom-right, no overlay) -->
+<div id="tourCard" style="display:none;">
+  <div id="tourProgress"></div>
+  <div id="tourBody">
+    <div id="tourIcon"></div>
+    <div id="tourTitle"></div>
+    <div id="tourDesc"></div>
+  </div>
+  <div id="tourFooter">
+    <button id="tourSkip">End tour</button>
+    <div id="tourNav">
+      <button id="tourPrev">←</button>
+      <span id="tourCounter"></span>
+      <button id="tourNext">Next →</button>
     </div>
   </div>
 </div>
@@ -4676,10 +4821,170 @@ window.addEventListener('load', () => {
   loadCustomCards();
   applyCustomCards();
   showHome();
+  initOnboarding();
 });
 
 window.addEventListener('offline', () => showToast('📡 Offline — progress tetap tersimpan'));
 window.addEventListener('online',  () => showToast('✅ Kembali online'));
+
+/* ══════════════════════════
+   ONBOARDING INTERAKTIF
+══════════════════════════ */
+// ── TOUR ──
+(function() {
+  var STEPS = [
+    {
+      icon: '🧠', title: 'Welcome to KnowItAll!',
+      desc: "Your intelligent learning companion. Let's see the key features — you can interact with the app while this card is open.",
+      screen: null, sel: null
+    },
+    {
+      icon: '📚', title: 'Choose Your Subject',
+      desc: 'Pick from Calculus, Chinese, or Java OOP. Each subject has flashcards with SM-2 spaced repetition.',
+      screen: 'home', sel: '.subjects-grid'
+    },
+    {
+      icon: '✏️', title: 'Edit Your Flashcards',
+      desc: 'Add, edit, or delete cards in any subject. Click a subject button in the Edit Cards bar.',
+      screen: 'home', sel: '.home-edit-bar'
+    },
+    {
+      icon: '🧠', title: 'Study Modes',
+      desc: 'Switch between Normal, Review Only, Spaced Rep, and kiCore adaptive modes from the toggle bar.',
+      screen: 'study-math', sel: '.mode-toggle', delay: 700
+    },
+    {
+      icon: '⚡', title: 'Weak Spot Tracker',
+      desc: 'Your lowest-scoring categories show up here. Hit Focus Mode to drill only those cards.',
+      screen: 'study-math', sel: '#weak-spot-panel', delay: 700
+    },
+    {
+      icon: '🤖', title: 'AI Tutor — Kiki',
+      desc: "Flip a card, then tap 'Ask Kiki' for explanations, mnemonics, or step-by-step help (free via Groq).",
+      screen: 'study-math', sel: '.nav-row', delay: 700
+    },
+    {
+      icon: '📝', title: 'Exam Mode',
+      desc: 'Timed exam simulation with question flagging and a full performance report by category.',
+      screen: 'exam-hub', sel: '.exam-subject-grid', delay: 400
+    },
+    {
+      icon: '🎉', title: "You're All Set!",
+      desc: 'Earn XP as you study, level up, and hit your daily goal. Good luck! 🚀',
+      screen: 'home', sel: null
+    }
+  ];
+
+  var step = 0;
+
+  function goScreen(s) {
+    if (!s) return;
+    if (s === 'home') goHome();
+    else if (s === 'study-math') launchSubject('math');
+    else if (s === 'exam-hub') goExamHub();
+  }
+
+  function clearHL() {
+    document.querySelectorAll('.tour-highlight').forEach(function(el) {
+      el.classList.remove('tour-highlight');
+    });
+  }
+
+  function hlEl(sel) {
+    clearHL();
+    if (!sel) return;
+    var el = document.querySelector(sel);
+    if (el) {
+      el.classList.add('tour-highlight');
+      el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function render() {
+    var s = STEPS[step];
+    var card = document.getElementById('tourCard');
+    if (!card) return;
+
+    document.getElementById('tourIcon').textContent = s.icon;
+    document.getElementById('tourTitle').textContent = s.title;
+    document.getElementById('tourDesc').textContent = s.desc;
+    document.getElementById('tourCounter').textContent = (step + 1) + ' / ' + STEPS.length;
+
+    // Progress bar
+    var pct = ((step + 1) / STEPS.length * 100).toFixed(1);
+    var fill = document.getElementById('tourProgressFill');
+    if (fill) fill.style.width = pct + '%';
+
+    // Prev button state
+    var prev = document.getElementById('tourPrev');
+    if (prev) prev.disabled = step === 0;
+
+    // Last step button label
+    var next = document.getElementById('tourNext');
+    if (next) next.textContent = step === STEPS.length - 1 ? 'Finish ✨' : 'Next →';
+
+    // Navigate + highlight
+    if (s.screen) goScreen(s.screen);
+    var delay = s.delay || 350;
+    setTimeout(function() { hlEl(s.sel); }, s.screen ? delay : 0);
+  }
+
+  function next() {
+    if (step < STEPS.length - 1) { step++; render(); }
+    else finish();
+  }
+
+  function prev() {
+    if (step > 0) { step--; render(); }
+  }
+
+  function finish() {
+    clearHL();
+    document.getElementById('tourCard').style.display = 'none';
+    localStorage.setItem('knowitall_onboarding_done', '1');
+    goHome();
+    showToast('🎉 Welcome! Tap any subject to begin.');
+  }
+
+  function skip() {
+    clearHL();
+    document.getElementById('tourCard').style.display = 'none';
+    localStorage.setItem('knowitall_onboarding_done', '1');
+    goHome();
+  }
+
+  function startTour() {
+    var card = document.getElementById('tourCard');
+    if (!card) return;
+    // Build progress fill div if missing
+    var prog = document.getElementById('tourProgress');
+    if (prog && !document.getElementById('tourProgressFill')) {
+      var fill = document.createElement('div');
+      fill.id = 'tourProgressFill';
+      prog.appendChild(fill);
+    }
+    step = 0;
+    card.style.display = 'block';
+    // Re-trigger animation
+    card.style.animation = 'none';
+    card.offsetHeight; // reflow
+    card.style.animation = '';
+    render();
+  }
+
+  // Wire buttons
+  document.getElementById('tourNext').addEventListener('click', next);
+  document.getElementById('tourPrev').addEventListener('click', prev);
+  document.getElementById('tourSkip').addEventListener('click', skip);
+
+  // Global hooks
+  window.replayOnboarding = startTour;
+  window.initOnboarding = function() {
+    if (localStorage.getItem('knowitall_onboarding_done')) return;
+    setTimeout(startTour, 800);
+  };
+})();
+
 
 /* ══════════════════════════════════════════
    EXAM MODE ENGINE
