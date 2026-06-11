@@ -1802,6 +1802,176 @@ kbd{
   #tourCard { right:12px; bottom:70px; width:calc(100vw - 24px); }
 }
   .highlight-element { box-shadow: 0 0 0 2px var(--sky) !important; animation: none; }
+
+/* ══════════════════════════════════════════
+   SUBJECT MANAGER
+══════════════════════════════════════════ */
+.sm-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.82);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  z-index:800;display:none;align-items:flex-start;justify-content:center;
+  padding:24px 14px 60px;overflow-y:auto;
+}
+.sm-overlay.open{display:flex;}
+.sm-modal{
+  background:var(--surface);border:1px solid var(--border2);
+  border-radius:24px;width:100%;max-width:700px;
+  animation:modal-in .3s cubic-bezier(.34,1.4,.64,1);flex-shrink:0;
+  position:relative;
+}
+.sm-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 26px 18px;border-bottom:1px solid var(--border);
+}
+.sm-header-left{}
+.sm-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.sm-title-sub{font-size:11px;color:var(--muted);margin-top:2px;}
+.sm-close{
+  background:none;border:1px solid var(--border);border-radius:9px;
+  color:var(--muted);font-size:18px;width:34px;height:34px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .2s;line-height:1;flex-shrink:0;
+}
+.sm-close:hover{border-color:var(--rose);color:var(--rose);}
+.sm-list{padding:18px 22px 0;display:flex;flex-direction:column;gap:9px;}
+.sm-item{
+  background:var(--surface2);border:1px solid var(--border);
+  border-radius:16px;padding:14px 16px;
+  transition:border-color .2s;
+}
+.sm-item:hover{border-color:var(--border2);}
+.sm-item-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.sm-item-icon{
+  width:44px;height:44px;border-radius:12px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:22px;
+  background:rgba(255,255,255,0.04);border:1px solid var(--border);
+}
+.sm-item-info{flex:1;min-width:0;}
+.sm-item-name{
+  font-family:'Syne',sans-serif;font-size:14px;font-weight:700;
+  display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:2px;
+}
+.sm-item-desc{font-size:11px;color:var(--muted);line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:320px;}
+.sm-item-chips{display:flex;gap:6px;margin-top:5px;flex-wrap:wrap;}
+.sm-chip{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:2px 8px;border-radius:8px;background:var(--surface3);
+  border:1px solid var(--border);color:var(--muted);
+}
+.sm-default-chip{
+  font-family:'DM Mono',monospace;font-size:8px;letter-spacing:1.5px;text-transform:uppercase;
+  color:var(--amber);background:rgba(255,190,85,.08);border:1px solid rgba(255,190,85,.2);
+  border-radius:6px;padding:2px 7px;
+}
+.sm-item-btns{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;align-items:center;}
+.sm-ibtn{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  padding:5px 11px;border-radius:10px;border:1px solid var(--border);
+  background:var(--surface3);color:var(--muted);cursor:pointer;transition:all .18s;
+}
+.sm-ibtn-go:hover{border-color:var(--violet);color:var(--violet);}
+.sm-ibtn-edit:hover{border-color:var(--sky);color:var(--sky);}
+.sm-ibtn-style:hover{border-color:var(--teal);color:var(--teal);}
+.sm-ibtn-del:hover{border-color:var(--rose);color:var(--rose);}
+.sm-add-row{padding:16px 22px 20px;}
+.sm-add-btn{
+  width:100%;padding:12px;border-radius:50px;
+  border:1px dashed rgba(255,255,255,.14);
+  background:rgba(255,255,255,.02);color:var(--muted);cursor:pointer;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;
+  transition:all .22s;display:flex;align-items:center;justify-content:center;gap:8px;
+}
+.sm-add-btn:hover{border-color:var(--sky);color:var(--sky);background:rgba(91,200,245,.04);}
+/* form */
+.sm-form-panel{
+  border-top:1px solid var(--border);padding:20px 24px 26px;
+  display:none;
+}
+.sm-form-panel.open{display:block;}
+.sm-form-hdr{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.sm-form-htitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;}
+.sm-back-btn{
+  background:none;border:1px solid var(--border);border-radius:8px;
+  color:var(--muted);padding:4px 11px;cursor:pointer;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1px;text-transform:uppercase;
+  transition:all .2s;
+}
+.sm-back-btn:hover{border-color:var(--sky);color:var(--sky);}
+.sm-field{margin-bottom:13px;}
+.sm-lbl{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:6px;display:block;
+}
+.sm-lbl-hint{font-size:9px;color:var(--muted2);font-style:italic;text-transform:none;letter-spacing:0;margin-left:5px;}
+.sm-input,.sm-select{
+  width:100%;background:var(--surface2);border:1px solid var(--border2);
+  color:var(--text);border-radius:10px;padding:10px 13px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;outline:none;
+  transition:border-color .2s;
+}
+.sm-input:focus,.sm-select:focus{border-color:rgba(91,200,245,.45);}
+.sm-input::placeholder{color:var(--muted2);}
+.sm-input:disabled{opacity:.4;cursor:not-allowed;}
+.sm-select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b6880' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;
+}
+.sm-select option{background:var(--surface2);}
+.sm-row2{display:grid;grid-template-columns:1fr 1fr;gap:11px;}
+.sm-icon-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:7px;}
+.sm-icon-opt{
+  width:38px;height:38px;border-radius:9px;font-size:19px;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  border:1px solid var(--border);background:var(--surface3);transition:all .18s;
+}
+.sm-icon-opt:hover{transform:scale(1.1);}
+.sm-icon-opt.sel{border-color:var(--sky);background:rgba(91,200,245,.1);}
+.sm-presets{display:flex;gap:7px;flex-wrap:wrap;margin-top:7px;}
+.sm-preset{
+  width:34px;height:34px;border-radius:9px;cursor:pointer;
+  border:2px solid transparent;transition:all .18s;flex-shrink:0;
+}
+.sm-preset:hover{transform:scale(1.08);}
+.sm-preset.sel{border-color:rgba(255,255,255,.7);box-shadow:0 0 0 2px rgba(255,255,255,.15);}
+.sm-color-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:8px;}
+.sm-color-item{display:flex;align-items:center;gap:6px;}
+.sm-color-swatch{
+  width:42px;height:42px;border-radius:9px;border:1px solid var(--border2);
+  cursor:pointer;padding:2px;background:none;
+}
+.sm-color-lbl{font-size:11px;color:var(--muted);}
+.sm-preview-bar{
+  flex:1;min-width:60px;height:42px;border-radius:9px;
+  background:linear-gradient(135deg,#5bc8f5,#b388ff);
+  transition:background .25s;
+}
+.sm-form-acts{display:flex;gap:9px;justify-content:flex-end;margin-top:18px;flex-wrap:wrap;}
+.sm-btn-save{
+  background:linear-gradient(135deg,var(--sky),var(--violet));
+  color:#07070f;border:none;border-radius:50px;padding:11px 26px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;
+  cursor:pointer;transition:all .2s;
+}
+.sm-btn-save:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(91,200,245,.3);}
+.sm-btn-cancel{
+  background:var(--surface);color:var(--muted);border:1px solid var(--border);
+  border-radius:50px;padding:11px 20px;
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;
+  cursor:pointer;transition:all .2s;
+}
+.sm-btn-cancel:hover{border-color:var(--border2);color:var(--text);}
+.nav-subjects-btn{
+  display:flex;align-items:center;gap:6px;
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;
+  padding:6px 13px;border-radius:20px;
+  background:none;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;transition:all .2s;
+}
+.nav-subjects-btn:hover{border-color:var(--teal);color:var(--teal);background:rgba(79,240,196,.06);}
+@media(max-width:600px){
+  .sm-row2{grid-template-columns:1fr;}
+  .sm-item-desc{max-width:180px;}
+  .sm-item-btns{gap:4px;}
 }
 </style>
 </head>
@@ -1839,6 +2009,7 @@ kbd{
       <div class="nav-xp-badge" id="nav-xp-badge">1</div>
       <span id="nav-xp-label">0 XP</span>
     </div>
+    <button class="nav-subjects-btn" onclick="openSubjectManager()" title="Manage Subjects">📂 Subjects</button>
     <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math')">✏ Edit Cards</button>
     <button class="nav-tour-btn" id="replay-tour-btn" onclick="replayOnboarding()" title="Replay Tour">🗺 Tour</button>
     <div class="nav-clock" id="nav-clock">—</div>
@@ -1870,6 +2041,7 @@ kbd{
   <div class="nav-drawer-divider"></div>
   <div class="nav-drawer-row">
     <span class="nav-drawer-label" id="drawer-xp">Level 1 · 0 XP</span>
+    <button class="nav-edit-btn" onclick="openSubjectManager();closeNavDrawer()">📂 Subjects</button>
     <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math');closeNavDrawer()">✏ Edit Cards</button>
     <button class="nav-edit-btn" onclick="replayOnboarding();closeNavDrawer()">🗺 Tour</button>
   </div>
@@ -1938,120 +2110,8 @@ kbd{
 
     <div class="section-label">Choose a Subject</div>
 
-    <div class="subjects-grid">
-      <!-- MATH -->
-      <div class="subject-card" onclick="launchSubject('math')">
-        <div class="sc-bg sc-bg-math"></div>
-        <div class="sc-inner">
-          <div class="sc-header">
-            <div class="sc-icon sc-icon-math">📐</div>
-            <span class="sc-badge scb-math">Mathematics</span>
-          </div>
-          <div class="sc-name">Calculus</div>
-          <div class="sc-desc">Integration, ODEs, Series, Partial Derivatives, Double Integrals, and Polar Coordinates</div>
-          <div class="sc-progress">
-            <div class="sc-prog-row">
-              <span class="sc-prog-label">Mastery Progress</span>
-              <span class="sc-prog-val sc-prog-val-math" id="math-prog-val">0 / 52</span>
-            </div>
-            <div class="sc-track"><div class="sc-fill sc-fill-math" id="math-prog-fill" style="width:0%"></div></div>
-          </div>
-          <div class="sc-meta">
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--math-a)"></span>
-              <span id="math-known-count">0 known</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--rose)"></span>
-              <span id="math-review-count">0 to review</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--muted2)"></span>
-              52 cards · 13 topics
-            </div>
-          </div>
-          <div class="sc-cta sc-cta-math">
-            <span>Start Studying</span>
-            <span class="sc-cta-arrow">→</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- CHINESE -->
-      <div class="subject-card" onclick="launchSubject('chinese')">
-        <div class="sc-bg sc-bg-cn"></div>
-        <div class="sc-inner">
-          <div class="sc-header">
-            <div class="sc-icon sc-icon-cn">🀄</div>
-            <span class="sc-badge scb-cn">Language</span>
-          </div>
-          <div class="sc-name">Chinese — 中文</div>
-          <div class="sc-desc">Vocabulary, grammar, and phrases grouped by category: greetings, verbs, places, time, and more</div>
-          <div class="sc-progress">
-            <div class="sc-prog-row">
-              <span class="sc-prog-label">Mastery Progress</span>
-              <span class="sc-prog-val sc-prog-val-cn" id="cn-prog-val">0 / 158</span>
-            </div>
-            <div class="sc-track"><div class="sc-fill sc-fill-cn" id="cn-prog-fill" style="width:0%"></div></div>
-          </div>
-          <div class="sc-meta">
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--cn-a)"></span>
-              <span id="cn-known-count">0 known</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--rose)"></span>
-              <span id="cn-review-count">0 to review</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--muted2)"></span>
-              158 cards · 16 topics
-            </div>
-          </div>
-          <div class="sc-cta sc-cta-cn">
-            <span>Start Studying</span>
-            <span class="sc-cta-arrow">→</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- OOP -->
-      <div class="subject-card" onclick="launchSubject('oop')">
-        <div class="sc-bg sc-bg-oop"></div>
-        <div class="sc-inner">
-          <div class="sc-header">
-            <div class="sc-icon sc-icon-oop">☕</div>
-            <span class="sc-badge scb-oop">Programming</span>
-          </div>
-          <div class="sc-name">OOP — Java</div>
-          <div class="sc-desc">Variables, arrays, operators, control flow, OOP classes/objects, inheritance, and polymorphism in Java</div>
-          <div class="sc-progress">
-            <div class="sc-prog-row">
-              <span class="sc-prog-label">Mastery Progress</span>
-              <span class="sc-prog-val sc-prog-val-oop" id="oop-prog-val">0 / 63</span>
-            </div>
-            <div class="sc-track"><div class="sc-fill sc-fill-oop" id="oop-prog-fill" style="width:0%"></div></div>
-          </div>
-          <div class="sc-meta">
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--oop-a)"></span>
-              <span id="oop-known-count">0 known</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--rose)"></span>
-              <span id="oop-review-count">0 to review</span>
-            </div>
-            <div class="sc-meta-item">
-              <span class="sc-meta-dot" style="background:var(--muted2)"></span>
-              63 cards · 9 topics
-            </div>
-          </div>
-          <div class="sc-cta sc-cta-oop">
-            <span>Start Studying</span>
-            <span class="sc-cta-arrow">→</span>
-          </div>
-        </div>
-      </div>
+    <div class="subjects-grid" id="subjects-grid">
+      <!-- dynamically rendered by renderSubjectsGrid() -->
     </div>
     <div class="home-bottom">
       <div class="hb-card">
@@ -2585,6 +2645,36 @@ kbd{
       <button id="tourPrev">←</button>
       <span id="tourCounter"></span>
       <button id="tourNext">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ SUBJECT MANAGER MODAL ══════════ -->
+<div id="smOverlay" style="position:fixed;inset:0;background:rgba(0,0,0,.82);backdrop-filter:blur(16px);z-index:800;display:none;align-items:flex-start;justify-content:center;padding:24px 14px 60px;overflow-y:auto;">
+  <div id="smModal" style="background:var(--surface);border:1px solid var(--border2);border-radius:24px;width:100%;max-width:700px;animation:modal-in .3s cubic-bezier(.34,1.4,.64,1);flex-shrink:0;">
+    <div class="sm-header">
+      <div class="sm-header-left">
+        <div class="sm-title">📚 Manage Subjects</div>
+        <div class="sm-title-sub">Add, rename, style, or remove study subjects</div>
+      </div>
+      <button class="sm-close" id="smCloseBtn">×</button>
+    </div>
+    <div class="sm-list" id="smList"></div>
+    <div class="sm-add-row">
+      <button class="sm-add-btn" id="smAddBtn">
+        <span style="font-size:17px;line-height:1;">＋</span> Add New Subject
+      </button>
+    </div>
+    <div class="sm-form-panel" id="smFormPanel">
+      <div class="sm-form-hdr">
+        <button class="sm-back-btn" id="smBackBtn">← Back</button>
+        <span class="sm-form-htitle" id="smFormTitle">New Subject</span>
+      </div>
+      <div id="smFormFields"></div>
+      <div class="sm-form-acts">
+        <button class="sm-btn-cancel" id="smCancelBtn">Cancel</button>
+        <button class="sm-btn-save" id="smSaveBtn">Save</button>
+      </div>
     </div>
   </div>
 </div>
@@ -3426,29 +3516,100 @@ function showHome() {
     document.getElementById(id).classList.remove('active');
   });
   document.getElementById('home').classList.add('active');
+  renderSubjectsGrid();
   updateHomeDashboard();
   updateClock();
   updateNav('home');
 }
+function renderSubjectsGrid() {
+  const grid = document.getElementById('subjects-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+
+  for (const [sid, sub] of Object.entries(subjects)) {
+    if (!sub || !sub.cards) continue;
+    const colorA = sub._colorA || (sid==='math'?'#5bc8f5':sid==='chinese'?'#ff6b9d':sid==='oop'?'#4ade80':'#5bc8f5');
+    const colorB = sub._colorB || (sid==='math'?'#b388ff':sid==='chinese'?'#ffbe55':sid==='oop'?'#818cf8':'#b388ff');
+    const icon   = sub.icon || (sid==='math'?'📐':sid==='chinese'?'🀄':sid==='oop'?'☕':'📚');
+    const known  = sub.cards.filter(c => marked[sid+'_'+c.id] === 'known').length;
+    const review = sub.cards.filter(c => marked[sid+'_'+c.id] === 'review').length;
+    const total  = sub.cards.length;
+    const pct    = total > 0 ? Math.round(known/total*100) : 0;
+    const cats   = sub.filters ? sub.filters.length : 0;
+
+    const card = document.createElement('div');
+    card.className = 'subject-card';
+    card.style.cursor = 'pointer';
+    card.innerHTML = `
+      <div style="position:absolute;inset:0;background:linear-gradient(135deg,${colorA},${colorB});opacity:.07;border-radius:var(--r);pointer-events:none;"></div>
+      <div class="sc-inner">
+        <div class="sc-header">
+          <div class="sc-icon" style="background:linear-gradient(135deg,${colorA}22,${colorB}22);border:1px solid ${colorA}44;font-size:22px;display:flex;align-items:center;justify-content:center;">${icon}</div>
+          <span class="sc-badge" style="color:${colorA};background:${colorA}18;border:1px solid ${colorA}33;">${sub.tag||'Subject'}</span>
+        </div>
+        <div class="sc-name">${sub.name}</div>
+        <div class="sc-desc">${sub.subtitle||sub.description||'No description'}</div>
+        <div class="sc-progress">
+          <div class="sc-prog-row">
+            <span class="sc-prog-label">Mastery Progress</span>
+            <span class="sc-prog-val" style="color:${colorA}" id="${sid}-prog-val">${known} / ${total}</span>
+          </div>
+          <div class="sc-track">
+            <div class="sc-fill" id="${sid}-prog-fill"
+              style="width:${pct}%;background:linear-gradient(90deg,${colorA},${colorB})"></div>
+          </div>
+        </div>
+        <div class="sc-meta">
+          <div class="sc-meta-item">
+            <span class="sc-meta-dot" style="background:${colorA}"></span>
+            <span id="${sid}-known-count">${known} known</span>
+          </div>
+          <div class="sc-meta-item">
+            <span class="sc-meta-dot" style="background:var(--rose)"></span>
+            <span id="${sid}-review-count">${review} to review</span>
+          </div>
+          <div class="sc-meta-item">
+            <span class="sc-meta-dot" style="background:var(--muted2)"></span>
+            ${total} cards${cats ? ' · '+cats+' topics' : ''}
+          </div>
+        </div>
+        <div class="sc-cta" style="background:${colorA}12;border:1px solid ${colorA}30;color:${colorA};">
+          <span>Start Studying</span>
+          <span class="sc-cta-arrow">→</span>
+        </div>
+      </div>`;
+    card.addEventListener('click', () => launchSubject(sid));
+    grid.appendChild(card);
+  }
+}
+
 function updateHomeDashboard() {
   let totalKnown = 0, totalReview = 0, totalCards = 0;
   for (const [sid, sub] of Object.entries(subjects)) {
-    const known = sub.cards.filter(c => marked[sid+'_'+c.id] === 'known').length;
+    if (!sub.cards) continue;
+    const known  = sub.cards.filter(c => marked[sid+'_'+c.id] === 'known').length;
     const review = sub.cards.filter(c => marked[sid+'_'+c.id] === 'review').length;
-    totalKnown += known;
+    totalKnown  += known;
     totalReview += review;
-    totalCards += sub.cards.length;
-    document.getElementById(sid+'-prog-val').textContent = known + ' / ' + sub.cards.length;
-    document.getElementById(sid+'-prog-fill').style.width = (known/sub.cards.length*100) + '%';
-    document.getElementById(sid+'-known-count').textContent = known + ' known';
-    document.getElementById(sid+'-review-count').textContent = review + ' to review';
+    totalCards  += sub.cards.length;
+    // Update dynamic card counters if rendered
+    const pv = document.getElementById(sid+'-prog-val');
+    const pf = document.getElementById(sid+'-prog-fill');
+    const kc = document.getElementById(sid+'-known-count');
+    const rc = document.getElementById(sid+'-review-count');
+    const pct = sub.cards.length > 0 ? known/sub.cards.length*100 : 0;
+    if (pv) pv.textContent = known + ' / ' + sub.cards.length;
+    if (pf) pf.style.width = pct + '%';
+    if (kc) kc.textContent = known + ' known';
+    if (rc) rc.textContent = review + ' to review';
   }
-  document.getElementById('hb-known').textContent = totalKnown;
-  document.getElementById('hb-review').textContent = totalReview;
-  document.getElementById('hb-total').textContent = totalCards;
-  document.getElementById('hb-pct').textContent = Math.round(totalKnown/totalCards*100) + '%';
-  document.getElementById('home-total-cards').textContent = totalCards;
-  document.getElementById('home-known-total').textContent = totalKnown;
+  const safe = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+  safe('hb-known',  totalKnown);
+  safe('hb-review', totalReview);
+  safe('hb-total',  totalCards);
+  safe('hb-pct',    (totalCards > 0 ? Math.round(totalKnown/totalCards*100) : 0) + '%');
+  safe('home-total-cards', totalCards);
+  safe('home-known-total', totalKnown);
 }
 function goHome() {
   clearInterval(sessionTimer); clearInterval(cardTimerInterval);
@@ -3456,6 +3617,47 @@ function goHome() {
   saveState();
   showHome();
 }
+
+// Expose for SM IIFE
+window.renderSubjectsGrid = renderSubjectsGrid;
+
+// Dynamically inject custom subjects into the navbar dropdown
+function refreshNavSubjects() {
+  // Remove previously injected custom nav links
+  document.querySelectorAll('.nav-link-custom').forEach(el => el.remove());
+  document.querySelectorAll('.nav-drawer-link-custom').forEach(el => el.remove());
+
+  const navLinks = document.querySelector('.nav-links');
+  const drawerLinks = document.querySelector('.nav-drawer-links');
+
+  for (const [sid, sub] of Object.entries(subjects)) {
+    if (['math','chinese','oop'].includes(sid)) continue; // skip built-ins
+    const icon = sub.icon || '📚';
+
+    // Desktop nav link
+    if (navLinks) {
+      const btn = document.createElement('button');
+      btn.className = 'nav-link nav-link-custom';
+      btn.dataset.screen = 'study';
+      btn.dataset.subject = sid;
+      btn.innerHTML = `<span class="nav-link-icon">${icon}</span> ${sub.name}`;
+      btn.addEventListener('click', () => launchSubject(sid));
+      navLinks.appendChild(btn);
+    }
+    // Mobile drawer link
+    if (drawerLinks) {
+      const btn = document.createElement('button');
+      btn.className = 'nav-drawer-link nav-drawer-link-custom';
+      btn.innerHTML = `<span>${icon}</span> ${sub.name}`;
+      btn.addEventListener('click', () => { launchSubject(sid); closeNavDrawer(); });
+      // Insert before the divider
+      const divider = drawerLinks.querySelector('.nav-drawer-divider');
+      if (divider) drawerLinks.insertBefore(btn, divider);
+      else drawerLinks.appendChild(btn);
+    }
+  }
+}
+window.refreshNavSubjects = refreshNavSubjects;
 
 /* ══════════════════════════
    LAUNCH SUBJECT
@@ -3471,8 +3673,19 @@ function launchSubject(subjectId) {
   kbdOpen = false;
 
   const studyInner = document.getElementById('study-inner');
-  studyInner.classList.remove('theme-math','theme-cn','theme-oop');
-  studyInner.classList.add(activeSubject.theme);
+  studyInner.classList.remove('theme-math','theme-cn','theme-oop','theme-custom');
+  studyInner.classList.add(activeSubject.theme || 'theme-math');
+
+  // Inject dynamic accent colors for custom subjects
+  const colorA = activeSubject._colorA;
+  const colorB = activeSubject._colorB;
+  if (colorA && colorB) {
+    studyInner.style.setProperty('--subject-a', colorA);
+    studyInner.style.setProperty('--subject-b', colorB);
+  } else {
+    studyInner.style.removeProperty('--subject-a');
+    studyInner.style.removeProperty('--subject-b');
+  }
 
   document.getElementById('study-subject-tag').textContent = activeSubject.tag;
   document.getElementById('study-h1').textContent = activeSubject.name;
@@ -4828,7 +5041,8 @@ window.addEventListener('load', () => {
   loadState();
   loadCustomCards();
   applyCustomCards();
-  showHome();
+  showHome();           // calls renderSubjectsGrid internally
+  refreshNavSubjects(); // inject custom subjects into navbar
   initOnboarding();
 });
 
@@ -5517,6 +5731,454 @@ setInterval(() => {
   const el = document.getElementById('nav-clock');
   if (el) el.textContent = h + ':' + m;
 }, 10000);
+
+/* ══════════════════════════════════════════
+   SUBJECT MANAGER — CLEAN REWRITE
+══════════════════════════════════════════ */
+(function() {
+  'use strict';
+
+  // ── Constants ──
+  var DEFAULT_IDS = ['math', 'chinese', 'oop'];
+  var STORAGE_KEY = 'kai_subject_meta_v2';
+
+  var SM_PRESETS = [
+    { name:'Sky/Violet',   a:'#5bc8f5', b:'#b388ff', theme:'theme-math' },
+    { name:'Rose/Amber',   a:'#ff6b9d', b:'#ffbe55', theme:'theme-cn'   },
+    { name:'Green/Indigo', a:'#4ade80', b:'#818cf8', theme:'theme-oop'  },
+    { name:'Coral/Rose',   a:'#ff6b6b', b:'#ff6b9d', theme:'theme-cn'   },
+    { name:'Teal/Sky',     a:'#4ff0c4', b:'#5bc8f5', theme:'theme-math' },
+    { name:'Amber/Coral',  a:'#ffbe55', b:'#ff6b6b', theme:'theme-oop'  },
+  ];
+
+  var SM_ICONS = ['📐','🀄','☕','📚','🔬','🧮','🌍','⚗️','🎸','📝','💻','🧬','🏛','✈️','🎨','🧠','⚽','🎵','🏔','🌊'];
+
+  // ── State ──
+  var meta = {};          // persisted cosmetic overrides + custom subject definitions
+  var formMode = null;    // 'add' | 'edit:ID' | 'style:ID'
+  var selIcon = '📚';
+  var selPreset = 0;
+  var customColorA = '';
+  var customColorB = '';
+
+  // ── DOM refs (set after DOMContentLoaded) ──
+  var overlay, modal, listEl, formPanel, formFields, formTitle,
+      saveBtn, addBtn, closeBtn, backBtn, cancelBtn;
+
+  // ── STORAGE ──
+  function loadMeta() {
+    try { meta = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e) { meta = {}; }
+  }
+  function saveMeta() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(meta)); } catch(e) {}
+  }
+
+  // Apply saved meta to subjects at startup
+  function applyMeta() {
+    loadMeta();
+    for (var sid in meta) {
+      var m = meta[sid];
+      if (window.subjects && window.subjects[sid]) {
+        // Cosmetic overrides on existing
+        if (m.name)  window.subjects[sid].name    = m.name;
+        if (m.tag)   window.subjects[sid].tag     = m.tag;
+        if (m.desc)  window.subjects[sid].subtitle= m.desc;
+        if (m.icon)  window.subjects[sid].icon    = m.icon;
+        if (m.colorA) window.subjects[sid]._colorA = m.colorA;
+        if (m.colorB) window.subjects[sid]._colorB = m.colorB;
+        if (m.theme)  window.subjects[sid].theme   = m.theme;
+      } else if (m._custom && window.subjects) {
+        // Re-hydrate custom subject
+        window.subjects[sid] = {
+          id: sid, name: m.name || sid, tag: m.tag || 'Subject',
+          subtitle: m.desc || '', cards: [],
+          theme: m.theme || 'theme-math', filters: m.filters || ['General'],
+          icon: m.icon || '📚', _colorA: m.colorA || '#5bc8f5',
+          _colorB: m.colorB || '#b388ff', _custom: true
+        };
+      }
+    }
+    // Sync cards from customCards into custom subjects
+    if (window.customCards && window.subjects) {
+      for (var sid2 in window.subjects) {
+        if (window.subjects[sid2]._custom) {
+          window.subjects[sid2].cards = window.customCards[sid2] || [];
+        }
+      }
+    }
+  }
+
+  // ── HELPERS ──
+  function colorA(sid) {
+    if (window.subjects && window.subjects[sid] && window.subjects[sid]._colorA) return window.subjects[sid]._colorA;
+    return sid==='math' ? '#5bc8f5' : sid==='chinese' ? '#ff6b9d' : sid==='oop' ? '#4ade80' : '#5bc8f5';
+  }
+  function colorB(sid) {
+    if (window.subjects && window.subjects[sid] && window.subjects[sid]._colorB) return window.subjects[sid]._colorB;
+    return sid==='math' ? '#b388ff' : sid==='chinese' ? '#ffbe55' : sid==='oop' ? '#818cf8' : '#b388ff';
+  }
+  function defIcon(sid) {
+    if (window.subjects && window.subjects[sid] && window.subjects[sid].icon) return window.subjects[sid].icon;
+    return sid==='math' ? '📐' : sid==='chinese' ? '🀄' : sid==='oop' ? '☕' : '📚';
+  }
+
+  // ── OPEN / CLOSE ──
+  function open() {
+    loadMeta();
+    renderList();
+    closeForm();
+    overlay.style.display = 'flex';
+    // small delay so display:flex is set before animation runs
+    requestAnimationFrame(function(){ modal.style.animation = 'none'; modal.offsetHeight; modal.style.animation = ''; });
+  }
+  function close() {
+    overlay.style.display = 'none';
+  }
+
+  // ── LIST ──
+  function renderList() {
+    listEl.innerHTML = '';
+    if (!window.subjects) return;
+    for (var sid in window.subjects) {
+      listEl.appendChild(buildItem(sid));
+    }
+  }
+
+  function buildItem(sid) {
+    var sub = window.subjects[sid];
+    var isDefault = DEFAULT_IDS.indexOf(sid) !== -1;
+    var ca = colorA(sid), cb = colorB(sid);
+    var icon = defIcon(sid);
+    var cards = sub.cards ? sub.cards.length : 0;
+
+    var div = document.createElement('div');
+    div.className = 'sm-item';
+    div.innerHTML = [
+      '<div class="sm-item-row">',
+        '<div class="sm-item-icon" style="background:linear-gradient(135deg,'+ca+'22,'+cb+'22);border-color:'+ca+'44;">'+icon+'</div>',
+        '<div class="sm-item-info">',
+          '<div class="sm-item-name">'+escHtml(sub.name)+(isDefault ? ' <span class="sm-default-chip">built-in</span>' : '')+'</div>',
+          '<div class="sm-item-desc">'+escHtml(sub.subtitle||sub.description||'No description')+'</div>',
+          '<div class="sm-item-chips">',
+            '<span class="sm-chip">'+escHtml(sub.tag||'Subject')+'</span>',
+            '<span class="sm-chip">'+cards+' cards</span>',
+          '</div>',
+        '</div>',
+        '<div class="sm-item-btns">',
+          '<button class="sm-ibtn sm-ibtn-go" data-action="go" data-sid="'+sid+'">Study →</button>',
+          '<button class="sm-ibtn sm-ibtn-edit" data-action="edit" data-sid="'+sid+'">Edit</button>',
+          '<button class="sm-ibtn sm-ibtn-style" data-action="style" data-sid="'+sid+'">Style</button>',
+          (!isDefault ? '<button class="sm-ibtn sm-ibtn-del" data-action="del" data-sid="'+sid+'">Delete</button>' : ''),
+        '</div>',
+      '</div>'
+    ].join('');
+
+    // Attach events to buttons
+    div.querySelectorAll('[data-action]').forEach(function(btn) {
+      btn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var action = this.dataset.action;
+        var id = this.dataset.sid;
+        if (action === 'go') { close(); if (window.launchSubject) window.launchSubject(id); }
+        else if (action === 'edit') openForm('edit:'+id);
+        else if (action === 'style') openForm('style:'+id);
+        else if (action === 'del') deleteSubject(id);
+      });
+    });
+    return div;
+  }
+
+  function escHtml(str) {
+    return String(str||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── FORM ──
+  function openForm(mode) {
+    formMode = mode;
+    formPanel.classList.add('open');
+
+    var sid = mode.indexOf(':') > -1 ? mode.split(':')[1] : null;
+    var sub = sid && window.subjects ? window.subjects[sid] : null;
+
+    if (mode === 'add') {
+      formTitle.textContent = 'New Subject';
+      saveBtn.textContent = 'Create Subject';
+      selIcon = '📚'; selPreset = 0;
+      customColorA = SM_PRESETS[0].a;
+      customColorB = SM_PRESETS[0].b;
+      formFields.innerHTML = buildAddFields();
+    } else if (mode.indexOf('edit:') === 0 && sub) {
+      formTitle.textContent = 'Edit — ' + sub.name;
+      saveBtn.textContent = 'Save Changes';
+      selIcon = sub.icon || defIcon(sid);
+      formFields.innerHTML = buildEditFields(sid, sub);
+    } else if (mode.indexOf('style:') === 0 && sub) {
+      formTitle.textContent = 'Style — ' + sub.name;
+      saveBtn.textContent = 'Apply Style';
+      customColorA = colorA(sid);
+      customColorB = colorB(sid);
+      // find closest preset
+      selPreset = 0;
+      SM_PRESETS.forEach(function(p, i) { if (p.a === customColorA) selPreset = i; });
+      formFields.innerHTML = buildStyleFields(sid, sub);
+      syncColorPreview();
+    }
+
+    // Wire icon picker
+    formFields.querySelectorAll('.sm-icon-opt').forEach(function(el) {
+      el.classList.toggle('sel', el.dataset.icon === selIcon);
+      el.addEventListener('click', function() {
+        selIcon = this.dataset.icon;
+        formFields.querySelectorAll('.sm-icon-opt').forEach(function(x){ x.classList.remove('sel'); });
+        this.classList.add('sel');
+      });
+    });
+    // Wire preset picker
+    formFields.querySelectorAll('.sm-preset').forEach(function(el, i) {
+      el.classList.toggle('sel', i === selPreset);
+      el.addEventListener('click', function() {
+        selPreset = parseInt(this.dataset.idx);
+        formFields.querySelectorAll('.sm-preset').forEach(function(x){ x.classList.remove('sel'); });
+        this.classList.add('sel');
+        var p = SM_PRESETS[selPreset];
+        customColorA = p.a; customColorB = p.b;
+        var ca2 = document.getElementById('smColorA');
+        var cb2 = document.getElementById('smColorB');
+        if (ca2) ca2.value = p.a;
+        if (cb2) cb2.value = p.b;
+        syncColorPreview();
+      });
+    });
+    // Wire color pickers
+    var caEl = document.getElementById('smColorA');
+    var cbEl = document.getElementById('smColorB');
+    if (caEl) caEl.addEventListener('input', function() { customColorA = this.value; syncColorPreview(); });
+    if (cbEl) cbEl.addEventListener('input', function() { customColorB = this.value; syncColorPreview(); });
+
+    // Scroll form into view
+    setTimeout(function() { formPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 80);
+  }
+
+  function closeForm() {
+    formMode = null;
+    formPanel.classList.remove('open');
+  }
+
+  function syncColorPreview() {
+    var prev = document.getElementById('smColorPreview');
+    if (prev) prev.style.background = 'linear-gradient(135deg,'+customColorA+','+customColorB+')';
+  }
+
+  function buildAddFields() {
+    var iconHtml = SM_ICONS.map(function(ic) {
+      return '<div class="sm-icon-opt" data-icon="'+ic+'">'+ic+'</div>';
+    }).join('');
+    var presetHtml = SM_PRESETS.map(function(p, i) {
+      return '<div class="sm-preset" data-idx="'+i+'" title="'+p.name+'" style="background:linear-gradient(135deg,'+p.a+','+p.b+');"></div>';
+    }).join('');
+    return [
+      '<div class="sm-row2">',
+        '<div class="sm-field"><label class="sm-lbl">Subject ID <span class="sm-lbl-hint">unique, no spaces</span></label>',
+        '<input class="sm-input" id="sfId" placeholder="e.g. physics" autocomplete="off"></div>',
+        '<div class="sm-field"><label class="sm-lbl">Name</label>',
+        '<input class="sm-input" id="sfName" placeholder="e.g. Physics"></div>',
+      '</div>',
+      '<div class="sm-row2">',
+        '<div class="sm-field"><label class="sm-lbl">Tag</label>',
+        '<input class="sm-input" id="sfTag" placeholder="e.g. Science"></div>',
+        '<div class="sm-field"><label class="sm-lbl">Default Category</label>',
+        '<input class="sm-input" id="sfCat" placeholder="e.g. Basics"></div>',
+      '</div>',
+      '<div class="sm-field"><label class="sm-lbl">Description</label>',
+      '<input class="sm-input" id="sfDesc" placeholder="What this subject covers"></div>',
+      '<div class="sm-field"><label class="sm-lbl">Icon</label><div class="sm-icon-grid">'+iconHtml+'</div></div>',
+      '<div class="sm-field"><label class="sm-lbl">Color Theme</label><div class="sm-presets">'+presetHtml+'</div></div>',
+    ].join('');
+  }
+
+  function buildEditFields(sid, sub) {
+    var isDefault = DEFAULT_IDS.indexOf(sid) !== -1;
+    var iconHtml = SM_ICONS.map(function(ic) {
+      return '<div class="sm-icon-opt'+(ic===selIcon?' sel':'')+'" data-icon="'+ic+'">'+ic+'</div>';
+    }).join('');
+    return [
+      '<div class="sm-field"><label class="sm-lbl">Subject ID <span class="sm-lbl-hint">cannot change</span></label>',
+      '<input class="sm-input" value="'+escHtml(sid)+'" disabled></div>',
+      '<div class="sm-row2">',
+        '<div class="sm-field"><label class="sm-lbl">Name</label>',
+        '<input class="sm-input" id="sfName" value="'+escHtml(sub.name||'')+'"></div>',
+        '<div class="sm-field"><label class="sm-lbl">Tag</label>',
+        '<input class="sm-input" id="sfTag" value="'+escHtml(sub.tag||'')+'"></div>',
+      '</div>',
+      '<div class="sm-field"><label class="sm-lbl">Description</label>',
+      '<input class="sm-input" id="sfDesc" value="'+escHtml(sub.subtitle||sub.description||'')+'"></div>',
+      '<div class="sm-field"><label class="sm-lbl">Icon</label><div class="sm-icon-grid">'+iconHtml+'</div></div>',
+    ].join('');
+  }
+
+  function buildStyleFields(sid, sub) {
+    var ca = customColorA || colorA(sid);
+    var cb = customColorB || colorB(sid);
+    var presetHtml = SM_PRESETS.map(function(p, i) {
+      return '<div class="sm-preset'+(i===selPreset?' sel':'')+'" data-idx="'+i+'" title="'+p.name+'" style="background:linear-gradient(135deg,'+p.a+','+p.b+');"></div>';
+    }).join('');
+    return [
+      '<div class="sm-field"><label class="sm-lbl">Color Preset</label>',
+      '<div class="sm-presets">'+presetHtml+'</div></div>',
+      '<div class="sm-field"><label class="sm-lbl">Custom Colors <span class="sm-lbl-hint">overrides preset</span></label>',
+      '<div class="sm-color-row">',
+        '<div class="sm-color-item">',
+          '<input type="color" id="smColorA" class="sm-color-swatch" value="'+(ca.startsWith('#')?ca:'#5bc8f5')+'">',
+          '<span class="sm-color-lbl">Accent A</span>',
+        '</div>',
+        '<div class="sm-color-item">',
+          '<input type="color" id="smColorB" class="sm-color-swatch" value="'+(cb.startsWith('#')?cb:'#b388ff')+'">',
+          '<span class="sm-color-lbl">Accent B</span>',
+        '</div>',
+        '<div id="smColorPreview" class="sm-preview-bar" style="background:linear-gradient(135deg,'+ca+','+cb+');"></div>',
+      '</div></div>',
+    ].join('');
+  }
+
+  // ── SAVE ──
+  function save() {
+    if (!formMode) return;
+
+    if (formMode === 'add') {
+      var id = (document.getElementById('sfId').value||'').trim().toLowerCase().replace(/\s+/g,'_');
+      var name = (document.getElementById('sfName').value||'').trim();
+      var tag = (document.getElementById('sfTag').value||'').trim();
+      var desc = (document.getElementById('sfDesc').value||'').trim();
+      var cat = (document.getElementById('sfCat').value||'').trim() || 'General';
+      if (!id) { showToast('⚠ Subject ID is required'); return; }
+      if (!name) { showToast('⚠ Subject Name is required'); return; }
+      if (window.subjects && window.subjects[id]) { showToast('⚠ ID "'+id+'" already exists'); return; }
+      if (!/^[a-z0-9_]+$/.test(id)) { showToast('⚠ ID: only lowercase letters, numbers, underscores'); return; }
+
+      var p = SM_PRESETS[selPreset] || SM_PRESETS[0];
+      var ca3 = customColorA || p.a;
+      var cb3 = customColorB || p.b;
+      var icon = selIcon || '📚';
+
+      var newSub = {
+        id: id, name: name, tag: tag||name, subtitle: desc, cards: [], filters: [cat],
+        icon: icon, _colorA: ca3, _colorB: cb3, theme: p.theme||'theme-math', _custom: true
+      };
+      if (window.subjects) window.subjects[id] = newSub;
+      if (window.customCards && !window.customCards[id]) {
+        window.customCards[id] = [];
+        try { window.saveCustomCards && window.saveCustomCards(); } catch(e) {}
+      }
+      meta[id] = { name: name, tag: tag, desc: desc, icon: icon, colorA: ca3, colorB: cb3,
+        theme: p.theme||'theme-math', filters: [cat], _custom: true };
+      saveMeta();
+      if (window.showToast) window.showToast('✓ Subject "'+name+'" created!');
+
+    } else if (formMode.indexOf('edit:') === 0) {
+      var sid4 = formMode.split(':')[1];
+      var sub4 = window.subjects && window.subjects[sid4];
+      if (!sub4) return;
+      var name4 = (document.getElementById('sfName').value||'').trim() || sub4.name;
+      var tag4 = (document.getElementById('sfTag').value||'').trim();
+      var desc4 = (document.getElementById('sfDesc').value||'').trim();
+      var icon4 = selIcon || defIcon(sid4);
+      sub4.name = name4; sub4.tag = tag4||sub4.tag; sub4.subtitle = desc4; sub4.icon = icon4;
+      if (!meta[sid4]) meta[sid4] = {};
+      Object.assign(meta[sid4], { name: name4, tag: tag4, desc: desc4, icon: icon4 });
+      if (sub4._custom) meta[sid4]._custom = true;
+      saveMeta();
+      if (window.showToast) window.showToast('✓ "'+name4+'" updated');
+
+    } else if (formMode.indexOf('style:') === 0) {
+      var sid5 = formMode.split(':')[1];
+      var sub5 = window.subjects && window.subjects[sid5];
+      if (!sub5) return;
+      var p5 = SM_PRESETS[selPreset] || SM_PRESETS[0];
+      var caEl2 = document.getElementById('smColorA');
+      var cbEl2 = document.getElementById('smColorB');
+      var ca5 = (caEl2 && caEl2.value) ? caEl2.value : p5.a;
+      var cb5 = (cbEl2 && cbEl2.value) ? cbEl2.value : p5.b;
+      sub5._colorA = ca5; sub5._colorB = cb5; sub5.theme = p5.theme||'theme-math';
+      if (!meta[sid5]) meta[sid5] = {};
+      Object.assign(meta[sid5], { colorA: ca5, colorB: cb5, theme: p5.theme||'theme-math' });
+      if (sub5._custom) meta[sid5]._custom = true;
+      saveMeta();
+      if (window.showToast) window.showToast('✓ Style applied to "'+sub5.name+'"');
+    }
+
+    renderList();
+    closeForm();
+    if (window.renderSubjectsGrid) window.renderSubjectsGrid();
+    if (window.updateHomeDashboard) window.updateHomeDashboard();
+    if (window.refreshNavSubjects) window.refreshNavSubjects();
+  }
+
+  // ── DELETE ──
+  function deleteSubject(sid) {
+    var sub = window.subjects && window.subjects[sid];
+    if (!sub) return;
+    if (DEFAULT_IDS.indexOf(sid) !== -1) { if (window.showToast) window.showToast('Built-in subjects cannot be deleted'); return; }
+    if (!confirm('Delete "' + sub.name + '"? All cards and progress will be removed.')) return;
+    delete window.subjects[sid];
+    delete meta[sid];
+    saveMeta();
+    if (window.customCards) { delete window.customCards[sid]; try { window.saveCustomCards && window.saveCustomCards(); } catch(e) {} }
+    if (window.marked) { for (var k in window.marked) { if (k.indexOf(sid+'_')===0) delete window.marked[k]; } }
+    if (window.sm2Data) { for (var k2 in window.sm2Data) { if (k2.indexOf(sid+'_')===0) delete window.sm2Data[k2]; } }
+    if (window.skillMatrix) delete window.skillMatrix[sid];
+    try { window.saveState && window.saveState(); } catch(e) {}
+    if (window.activeSubject && window.activeSubject.id === sid) { if (window.goHome) window.goHome(); }
+    renderList();
+    if (window.renderSubjectsGrid) window.renderSubjectsGrid();
+    if (window.updateHomeDashboard) window.updateHomeDashboard();
+    if (window.showToast) window.showToast('"'+sub.name+'" deleted');
+  }
+
+  // ── INIT (wait for DOM ready) ──
+  function init() {
+    overlay   = document.getElementById('smOverlay');
+    modal     = document.getElementById('smModal');
+    listEl    = document.getElementById('smList');
+    formPanel = document.getElementById('smFormPanel');
+    formFields= document.getElementById('smFormFields');
+    formTitle = document.getElementById('smFormTitle');
+    saveBtn   = document.getElementById('smSaveBtn');
+    addBtn    = document.getElementById('smAddBtn');
+    closeBtn  = document.getElementById('smCloseBtn');
+    backBtn   = document.getElementById('smBackBtn');
+    cancelBtn = document.getElementById('smCancelBtn');
+
+    if (!overlay) { console.error('SM: #smOverlay not found'); return; }
+
+    closeBtn.addEventListener('click', close);
+    backBtn.addEventListener('click', closeForm);
+    cancelBtn.addEventListener('click', closeForm);
+    saveBtn.addEventListener('click', save);
+    addBtn.addEventListener('click', function() { openForm('add'); });
+    overlay.addEventListener('click', function(e) { if (e.target === overlay) close(); });
+  }
+
+  // ── PUBLIC API ──
+  window.openSubjectManager = function() { applyMeta(); open(); };
+  window.closeSubjectManager = close;
+  window.smApplyMeta = applyMeta;
+
+  // Init as soon as DOM is available
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  // Also apply meta on window load (after subjects + customCards are loaded)
+  window.addEventListener('load', function() {
+    applyMeta();
+    if (window.renderSubjectsGrid) window.renderSubjectsGrid();
+    if (window.refreshNavSubjects) window.refreshNavSubjects();
+    if (window.updateHomeDashboard) window.updateHomeDashboard();
+  });
+
+})(); /* end Subject Manager IIFE */
 </script>
 </body>
 </html>
