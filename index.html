@@ -1313,8 +1313,52 @@ kbd{
 .ai-response mjx-container{color:var(--text)!important;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 
-/* ── HOME EDIT BAR ── */
-.home-edit-bar{
+/* ── HOME ACTIONS ROW (replaces exam-mode-bar + home-edit-bar) ── */
+.home-actions-row{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:28px;
+}
+.home-action-card{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-sm);padding:14px 16px;
+  cursor:pointer;transition:all .22s cubic-bezier(.34,1.2,.64,1);
+  position:relative;overflow:hidden;
+}
+.home-action-card:hover{transform:translateY(-3px);border-color:var(--border2);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.home-action-card:active{transform:scale(.97);}
+.home-action-icon{
+  font-size:20px;width:38px;height:38px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;background:var(--surface2);border:1px solid var(--border);
+}
+.home-action-text{flex:1;min-width:0;}
+.home-action-title{font-size:12px;font-weight:700;line-height:1.2;margin-bottom:2px;}
+.home-action-sub{font-size:10px;color:var(--muted);letter-spacing:.3px;}
+.home-action-arrow{font-size:14px;color:var(--muted);flex-shrink:0;transition:transform .2s;}
+.home-action-card:hover .home-action-arrow{transform:translateX(3px);}
+.home-action-exam::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--amber),var(--coral));opacity:.04;transition:opacity .2s;}
+.home-action-exam:hover::before{opacity:.08;}
+.home-action-exam .home-action-icon{background:rgba(255,190,85,.1);border-color:rgba(255,190,85,.2);}
+.home-action-exam .home-action-title{color:var(--amber);}
+.home-action-edit::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--violet),var(--sky));opacity:.04;transition:opacity .2s;}
+.home-action-edit:hover::before{opacity:.08;}
+.home-action-edit .home-action-icon{background:rgba(179,136,255,.1);border-color:rgba(179,136,255,.2);}
+.home-action-edit .home-action-title{color:var(--violet);}
+.home-action-subjects::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--teal),var(--sky));opacity:.04;transition:opacity .2s;}
+.home-action-subjects:hover::before{opacity:.08;}
+.home-action-subjects .home-action-icon{background:rgba(79,240,196,.1);border-color:rgba(79,240,196,.2);}
+.home-action-subjects .home-action-title{color:var(--teal);}
+@media(max-width:500px){
+  .home-actions-row{grid-template-columns:1fr;}
+  .home-action-card{padding:12px 14px;}
+}
+
+/* ── HOME EDIT BAR (legacy, now hidden) ── */
+.home-edit-bar{display:none!important;}
+.exam-mode-bar{display:none!important;}
   display:flex;align-items:center;justify-content:space-between;
   background:var(--surface);border:1px solid var(--border);
   border-radius:var(--r);padding:16px 20px;margin-bottom:28px;
@@ -1617,9 +1661,9 @@ kbd{
 }
 .nav-tour-btn:hover{border-color:var(--sky);color:var(--sky);background:rgba(91,200,245,0.06);}
 
-/* hamburger for mobile */
+/* hamburger always visible on all screen sizes */
 .nav-hamburger{
-  display:none;
+  display:flex;
   background:none;border:1px solid var(--border);border-radius:8px;
   color:var(--muted);width:34px;height:34px;
   flex-direction:column;align-items:center;justify-content:center;gap:4px;
@@ -1633,6 +1677,46 @@ kbd{
 .nav-hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0);}
 .nav-hamburger.open span:nth-child(3){transform:translateY(-5.5px) rotate(-45deg);}
 .nav-hamburger:hover{border-color:var(--border2);color:var(--text);}
+
+/* drawer tool buttons */
+.nav-drawer-section-label{
+  font-family:'DM Mono',monospace;font-size:9px;letter-spacing:2.5px;text-transform:uppercase;
+  color:var(--muted2);padding:6px 16px 4px;
+}
+.nav-drawer-tools{
+  display:flex;flex-direction:column;gap:2px;padding:4px 8px;
+}
+.nav-drawer-tool-btn{
+  display:flex;align-items:center;gap:12px;
+  width:100%;text-align:left;
+  padding:10px 10px;border-radius:10px;
+  background:none;border:none;cursor:pointer;
+  transition:background .15s;
+}
+.nav-drawer-tool-btn:hover{background:rgba(255,255,255,0.05);}
+.nav-drawer-tool-icon{
+  font-size:18px;width:32px;height:32px;border-radius:8px;
+  background:var(--surface2);border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;line-height:1;
+}
+.nav-drawer-tool-text{
+  display:flex;flex-direction:column;gap:1px;
+}
+.nav-drawer-tool-title{
+  font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:600;
+  color:var(--text);line-height:1.2;
+}
+.nav-drawer-tool-sub{
+  font-size:10px;color:var(--muted);line-height:1.3;
+}
+.nav-drawer-xp-row{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 16px 14px;
+}
+.nav-drawer-xp-row .nav-drawer-label{
+  font-size:11px;color:var(--muted);
+}
 
 /* mobile drawer */
 .nav-drawer{
@@ -1679,10 +1763,6 @@ kbd{
   .nav-links{display:none;}
   .nav-divider{display:none;}
   .nav-clock{display:none;}
-  .nav-xp-pill .nav-clock-txt{display:none;}
-  .nav-hamburger{display:flex;}
-  .nav-edit-btn{display:none;}
-  .nav-subjects-btn{display:none;}
 }
 @media(max-width:400px){
   .nav-xp-pill{display:none;}
@@ -1967,13 +2047,6 @@ kbd{
   padding:6px 13px;border-radius:20px;
   background:none;border:1px solid var(--border);color:var(--muted);
   cursor:pointer;transition:all .2s;
-  
-  @media (min-width: 721px) {
-  .nav-subjects-btn {
-    display: none;
-  }
-}
-  
 }
 .nav-subjects-btn:hover{border-color:var(--teal);color:var(--teal);background:rgba(79,240,196,.06);}
 @media(max-width:600px){
@@ -2017,9 +2090,6 @@ kbd{
       <div class="nav-xp-badge" id="nav-xp-badge">1</div>
       <span id="nav-xp-label">0 XP</span>
     </div>
-    <button class="nav-subjects-btn" onclick="openSubjectManager()" title="Manage Subjects">📂 Subjects</button>
-    <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math')">✏ Edit Cards</button>
-    <button class="nav-tour-btn" id="replay-tour-btn" onclick="replayOnboarding()" title="Replay Tour">🗺 Tour</button>
     <div class="nav-clock" id="nav-clock">—</div>
     <button class="nav-hamburger" id="nav-hamburger" onclick="toggleNavDrawer()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -2047,11 +2117,34 @@ kbd{
     </button>
   </div>
   <div class="nav-drawer-divider"></div>
-  <div class="nav-drawer-row">
-    <span class="nav-drawer-label" id="drawer-xp">Level 1 · 0 XP</span>
-    <button class="nav-edit-btn" onclick="openSubjectManager();closeNavDrawer()">📂 Subjects</button>
-    <button class="nav-edit-btn" onclick="openEditorFromHome(navLastSubject||'math');closeNavDrawer()">✏ Edit Cards</button>
-    <button class="nav-edit-btn" onclick="replayOnboarding();closeNavDrawer()">🗺 Tour</button>
+  <div class="nav-drawer-section-label">Tools</div>
+  <div class="nav-drawer-tools">
+    <button class="nav-drawer-tool-btn" onclick="openSubjectManager();closeNavDrawer()">
+      <span class="nav-drawer-tool-icon">📂</span>
+      <span class="nav-drawer-tool-text">
+        <span class="nav-drawer-tool-title">Manage Subjects</span>
+        <span class="nav-drawer-tool-sub">Add, style, or remove subjects</span>
+      </span>
+    </button>
+    <button class="nav-drawer-tool-btn" onclick="openEditorFromHome(navLastSubject||'math');closeNavDrawer()">
+      <span class="nav-drawer-tool-icon">✏️</span>
+      <span class="nav-drawer-tool-text">
+        <span class="nav-drawer-tool-title">Edit Flashcards</span>
+        <span class="nav-drawer-tool-sub">Add or edit cards in any subject</span>
+      </span>
+    </button>
+    <button class="nav-drawer-tool-btn" onclick="replayOnboarding();closeNavDrawer()">
+      <span class="nav-drawer-tool-icon">🗺</span>
+      <span class="nav-drawer-tool-text">
+        <span class="nav-drawer-tool-title">App Tour</span>
+        <span class="nav-drawer-tool-sub">Replay the onboarding walkthrough</span>
+      </span>
+    </button>
+  </div>
+  <div class="nav-drawer-divider"></div>
+  <div class="nav-drawer-xp-row">
+    <div class="nav-xp-badge" id="drawer-xp-badge" style="width:30px;height:30px;border-radius:8px;font-size:13px;">1</div>
+    <span class="nav-drawer-label" id="drawer-xp">Level 1 · Beginner · 0 XP</span>
   </div>
 </div>
 
@@ -2089,30 +2182,30 @@ kbd{
       </div>
     </div>
 
-    <div class="exam-mode-bar" onclick="goExamHub()">
-      <div class="emb-left">
-        <div class="emb-icon">📝</div>
-        <div class="emb-text">
-          <div class="emb-title">Exam Mode</div>
-          <div class="emb-sub">Simulate a real exam — timed, scored, with full report analysis</div>
+    <div class="home-actions-row">
+      <div class="home-action-card home-action-exam" onclick="goExamHub()">
+        <span class="home-action-icon">📝</span>
+        <div class="home-action-text">
+          <div class="home-action-title">Exam Mode</div>
+          <div class="home-action-sub">Timed · Scored · Full report</div>
         </div>
+        <span class="home-action-arrow">→</span>
       </div>
-      <div class="emb-cta">Take Exam →</div>
-    </div>
-
-    <!-- Edit Cards Bar -->
-    <div class="home-edit-bar">
-      <div class="heb-left">
-        <div class="heb-icon">✏️</div>
-        <div>
-          <div class="heb-text-title">Edit Flashcards</div>
-          <div class="heb-text-sub">Add, edit, or delete cards in any subject</div>
+      <div class="home-action-card home-action-edit" onclick="openEditorFromHome(navLastSubject||'math')">
+        <span class="home-action-icon">✏️</span>
+        <div class="home-action-text">
+          <div class="home-action-title">Edit Cards</div>
+          <div class="home-action-sub">Add · Edit · Delete</div>
         </div>
+        <span class="home-action-arrow">→</span>
       </div>
-      <div class="heb-btns">
-        <button class="heb-btn heb-btn-math" onclick="openEditorFromHome('math')">📐 Calculus</button>
-        <button class="heb-btn heb-btn-cn" onclick="openEditorFromHome('chinese')">🀄 Chinese</button>
-        <button class="heb-btn heb-btn-oop" onclick="openEditorFromHome('oop')">☕ OOP</button>
+      <div class="home-action-card home-action-subjects" onclick="openSubjectManager()">
+        <span class="home-action-icon">📂</span>
+        <div class="home-action-text">
+          <div class="home-action-title">Subjects</div>
+          <div class="home-action-sub">Manage · Style · Add new</div>
+        </div>
+        <span class="home-action-arrow">→</span>
       </div>
     </div>
 
@@ -5698,7 +5791,9 @@ function updateNav(activeScreen, subjectId) {
   const info = getLevelInfo(xpData.total);
   document.getElementById('nav-xp-badge').textContent = info.level;
   document.getElementById('nav-xp-label').textContent = xpData.total + ' XP';
-  document.getElementById('drawer-xp').textContent = 'Level ' + info.level + ' · ' + info.name;
+  document.getElementById('drawer-xp').textContent = 'Level ' + info.level + ' · ' + info.name + ' · ' + xpData.total + ' XP';
+  const dxb = document.getElementById('drawer-xp-badge');
+  if (dxb) dxb.textContent = info.level;
 
   // Clock
   const now = new Date();
@@ -6115,13 +6210,11 @@ setInterval(() => {
     }
 
     renderList();
-    
+    closeForm();
+    if (window.applyCustomCards) window.applyCustomCards();
     if (window.renderSubjectsGrid) window.renderSubjectsGrid();
     if (window.updateHomeDashboard) window.updateHomeDashboard();
     if (window.refreshNavSubjects) window.refreshNavSubjects();
-
-    closeForm();
-   
   }
 
   // ── DELETE ──
@@ -6142,6 +6235,7 @@ setInterval(() => {
     renderList();
     if (window.renderSubjectsGrid) window.renderSubjectsGrid();
     if (window.updateHomeDashboard) window.updateHomeDashboard();
+    if (window.refreshNavSubjects) window.refreshNavSubjects();
     if (window.showToast) window.showToast('"'+sub.name+'" deleted');
   }
 
